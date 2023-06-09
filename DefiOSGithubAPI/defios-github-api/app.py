@@ -26,12 +26,12 @@ git_integration = GithubIntegration(
 
 
 class PingLive(Resource):
-    def get():
+    def get(self):
         return "Alive"
 
 
 class GithubWebhook(Resource):
-    def post():
+    def post(self):
         payload = request.json()
         if "issue" in payload.keys() and payload["action"] == "opened":
             create_issue_comment(
