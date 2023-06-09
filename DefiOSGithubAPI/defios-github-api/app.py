@@ -21,7 +21,7 @@ cors = CORS(app)
 config = configparser.ConfigParser()
 config.read("config.ini")
 
-app_id = config["github"]["app_id"]
+app_id = int(config["github"]["app_id"])
 cert_path = config["github"]["cert_path"]
 # Read the bot certificate
 with open(cert_path, "r") as cert_file:
@@ -48,12 +48,7 @@ class GithubWebhook(Resource):
                 git_integration, payload, "../markdown_files/issue_opened.md"
             )
             return "Done"
-        if (
-            "issue" in payload.keys()
-            and payload["action"] == "closed"
-            and payload["issue"]["active_lock_reason"] == "resolved"
-            and "pull_request" in payload["issue"].keys()
-        ):
+        if "issue" in payload.keys() and payload["action"] == "closed":
             create_issue_comment(
                 git_integration, payload, "../markdown_files/issue_closed.md"
             )
@@ -61,6 +56,11 @@ class GithubWebhook(Resource):
         if "pull_request" in payload.keys() and payload["action"] == "opened":
             create_pr_comment(
                 git_integration, payload, "../markdown_files/pull_request_opened.md"
+            )
+            return "Done"
+        if "pull_request" in payload.keys() and payload["action"] == "closed":
+            create_pr_comment(
+                git_integration, payload, "../markdown_files/pull_request_closed.md"
             )
             return "Done"
 
