@@ -23,6 +23,7 @@ def get_issue(git_integration, payload):
     issue = repo.get_issue(number=pull_request_no)
     return issue
 
+
 def get_pr(git_integration, payload):
     owner = payload["repository"]["owner"]["login"]
     repo_name = payload["repository"]["name"]
@@ -35,6 +36,7 @@ def get_pr(git_integration, payload):
     pull_request_no = get_pull_request_no(payload)
     pr = repo.get_pull(number=pull_request_no)
     return pr
+
 
 def create_comment(issue, comment):
     issue.create_comment(comment)
@@ -50,6 +52,7 @@ def create_issue_comment(git_integration, payload, comment_path):
     comment = read_markdown(comment_path)
     issue = get_issue(git_integration, payload)
     create_comment(issue, comment)
+
 
 def create_pr_comment(git_integration, payload, comment_path):
     comment = read_markdown(comment_path)
