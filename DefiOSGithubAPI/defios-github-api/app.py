@@ -15,7 +15,7 @@ config.read("config.ini")
 app_id = config["github"]["app_id"]
 cert_path = config["github"]["cert_path"]
 # Read the bot certificate
-with open("r", cert_path) as cert_file:
+with open(cert_path,"r") as cert_file:
     app_key = cert_file.read()
 
 # Create an GitHub integration instance
