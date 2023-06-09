@@ -49,7 +49,10 @@ class GithubWebhook(Resource):
             )
             return "Done"
         if "pull_request" in payload.keys() and payload["action"] == "opened":
-            pass
+            create_issue_comment(
+                git_integration, payload, "../markdown_files/issue_closed.md"
+            )
+            return "Done"
 
 
 api.add_resource(PingLive, "/health")
