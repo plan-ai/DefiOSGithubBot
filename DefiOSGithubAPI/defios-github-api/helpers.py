@@ -1,6 +1,15 @@
 from github import Github
 
 
+def get_pull_request_no(payload):
+    if " issue" in payload.keys():
+        url = payload["issue"]["pull_request"]["url"]
+        pull_request_no = url.split("pull/")[1]
+    elif "pull_request" in payload.keys():
+        pull_request_no = payload["number"]
+    return pull_request_no
+
+
 def get_issue(git_integration, payload):
     owner = payload["repository"]["owner"]["login"]
     repo_name = payload["repository"]["name"]
@@ -10,8 +19,7 @@ def get_issue(git_integration, payload):
         ).token
     )
     repo = git_connection.get_repo(f"{owner}/{repo_name}")
-    url = payload["issue"]["pull_request"]["url"]
-    pull_request_no = url.split("pull/")[1]
+    pull_request_no = get_pull_request_no(payload)
     issue = repo.get_issue(number=pull_request_no)
     return issue
 
