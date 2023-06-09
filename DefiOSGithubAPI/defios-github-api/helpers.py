@@ -2,12 +2,12 @@ from github import Github
 
 
 def get_pull_request_no(payload):
-    if " issue" in payload.keys():
-        url = payload["issue"]["pull_request"]["url"]
-        pull_request_no = url.split("pull/")[1]
+    if "issue" in payload.keys():
+        url = payload["issue"]["url"]
+        pull_request_no = url.split("issues/")[1]
     elif "pull_request" in payload.keys():
         pull_request_no = payload["number"]
-    return pull_request_no
+    return int(pull_request_no)
 
 
 def get_issue(git_integration, payload):
