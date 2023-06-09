@@ -2,7 +2,7 @@ from flask import Flask
 from flask_restful import Api, Resource, request
 from flask_cors import CORS
 from github import GithubIntegration
-from helpers import create_issue_comment
+from helpers import create_issue_comment,create_pr_comment
 import configparser
 
 app = Flask(__name__)
@@ -49,7 +49,7 @@ class GithubWebhook(Resource):
             )
             return "Done"
         if "pull_request" in payload.keys() and payload["action"] == "opened":
-            create_issue_comment(
+            create_pr_comment(
                 git_integration, payload, "../markdown_files/pull_request_opened.md"
             )
             return "Done"
