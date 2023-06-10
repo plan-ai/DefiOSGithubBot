@@ -10,28 +10,20 @@ def get_resource_no(payload):
     return int(resource_no)
 
 
-def get_issue(git_integration, payload):
+def get_issue(github_app, payload):
     owner = payload["repository"]["owner"]["login"]
     repo_name = payload["repository"]["name"]
-    git_connection = Github(
-        login_or_token=git_integration.get_access_token(
-            git_integration.get_installation(owner, repo_name).id
-        ).token
-    )
+    git_connection = Github(app_auth=github_app)
     repo = git_connection.get_repo(f"{owner}/{repo_name}")
     resource_no = get_resource_no(payload)
     issue = repo.get_issue(number=resource_no)
     return issue
 
 
-def get_pr(git_integration, payload):
+def get_pr(github_app, payload):
     owner = payload["repository"]["owner"]["login"]
     repo_name = payload["repository"]["name"]
-    git_connection = Github(
-        login_or_token=git_integration.get_access_token(
-            git_integration.get_installation(owner, repo_name).id
-        ).token
-    )
+    git_connection = Github(app_auth=github_app)
     repo = git_connection.get_repo(f"{owner}/{repo_name}")
     resource_no = get_resource_no(payload)
     pr = repo.get_pull(number=resource_no)
@@ -52,13 +44,13 @@ def read_markdown(file_path):
     return text
 
 
-def create_issue_comment(git_integration, payload, comment_path):
+def create_issue_comment(github_app, payload, comment_path):
     comment = read_markdown(comment_path)
-    issue = get_issue(git_integration, payload)
+    issue = get_issue(github_app, payload)
     create_comment(issue, comment)
 
 
-def create_pr_comment(git_integration, payload, comment_path):
+def create_pr_comment(github_app, payload, comment_path):
     comment = read_markdown(comment_path)
-    pr = get_pr(git_integration, payload)
+    pr = get_pr(github_app, payload)
     create_comment(pr, comment)
